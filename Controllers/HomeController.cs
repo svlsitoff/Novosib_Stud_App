@@ -17,9 +17,29 @@ namespace App.Controllers
         {
             db = context;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index(string sortOrder)
         {
-            return View(db.Students.ToList());
+            ViewData["LastNameSort"] = String.IsNullOrEmpty(sortOrder) ? "LastName" : "";
+            ViewData["FirstNameSort"] = String.IsNullOrEmpty(sortOrder) ? "FirstName" : "";
+            ViewData["MidNameSort"] = String.IsNullOrEmpty(sortOrder) ? "MidName" : "";
+            var students = from s in db.Students
+                           select s;
+            switch (sortOrder)
+            {
+                case "LastName":
+                    students = students.OrderByDescending(s => s.LastNAme);
+                    break;
+                case "MidName":
+                    students = students.OrderBy(s => s.MiddleName);
+                    break;
+                case "FirstName":
+                    students = students.OrderBy(s => s.FirstName);
+                    break;
+                default:
+                    students = students.OrderBy(s => s.LastNAme);
+                    break;
+            }
+            return View(await students.AsNoTracking().ToListAsync());
         }
         [HttpGet]
         public IActionResult AddStudent()
