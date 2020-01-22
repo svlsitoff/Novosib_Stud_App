@@ -22,8 +22,12 @@ namespace App.Controllers
             ViewData["LastNameSort"] = String.IsNullOrEmpty(sortOrder) ? "LastName" : "";
             ViewData["FirstNameSort"] = String.IsNullOrEmpty(sortOrder) ? "FirstName" : "";
             ViewData["MidNameSort"] = String.IsNullOrEmpty(sortOrder) ? "MidName" : "";
-            var students = from s in db.Students
-                           select s;
+            ViewData["CallNameSort"] = String.IsNullOrEmpty(sortOrder) ? "CallName" : "";
+            ViewData["Sex_Sort"] = String.IsNullOrEmpty(sortOrder) ? "Sex" : "";
+
+
+            var students = db.Students.AsQueryable<Student>();
+            ViewBag.Count = students.Count();
             switch (sortOrder)
             {
                 case "LastName":
@@ -35,11 +39,30 @@ namespace App.Controllers
                 case "FirstName":
                     students = students.OrderBy(s => s.FirstName);
                     break;
+                case "CallName":
+                    students = students.OrderBy(s => s.CallName);
+                    break;
+                case "Sex":
+                    students = students.OrderBy(s => s.Sex);
+                    break;
                 default:
                     students = students.OrderBy(s => s.LastNAme);
                     break;
             }
             return View(await students.AsNoTracking().ToListAsync());
+        }
+        [AcceptVerbs("Get", "Post")]
+        public IActionResult CheckCallName(string callName)
+        {
+            var students = db.Students.AsQueryable<Student>();
+            foreach(var item in students)
+            {
+                if (item.CallName == callName)
+                {
+                    return Json(false);
+                }
+            }
+            return Json(true);
         }
         [HttpGet]
         public IActionResult AddStudent()
@@ -49,9 +72,17 @@ namespace App.Controllers
         [HttpPost]
         public IActionResult AddStudent(Student student)
         {
-            db.Students.Add(student);
-            db.SaveChanges();
-            return Redirect("~/Home/Index");
+            try
+            {
+                db.Students.Add(student);
+                db.SaveChanges();
+                return Redirect("~/Home/Index");
+            }
+            catch
+            {
+                return View();
+            }
+            
         }
 
         public IActionResult EditStudent(int? id)

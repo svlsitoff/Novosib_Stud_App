@@ -10,5 +10,6 @@ namespace App.Models
         {
             Database.EnsureCreated();
         }
+       
     }
 }
