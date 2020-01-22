@@ -1,1 +1,6 @@
+<<<<<<< HEAD
 *.ide
+=======
+*.ide-shm
+*.ide-wal
+>>>>>>> Develop

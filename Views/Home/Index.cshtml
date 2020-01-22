@@ -10,6 +10,9 @@
 <p>
     <a asp-action="AddStudent">Добавить студента</a>
 </p>
+<p>
+    <label>Количество учащихся : @ViewBag.Count</label>
+</p>
 <table class="table">
     <thead>
         <tr>
@@ -17,31 +20,31 @@
                 <a asp-action="Index" asp-route-sortOrder="@ViewData["FirstNameSort"]">@Html.DisplayNameFor(model => model.FirstName)</a>              
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["LastNameSort"]">@Html.DisplayNameFor(model => model.MiddleName)</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["MidNameSort"]">@Html.DisplayNameFor(model => model.MiddleName)</a>
             </th>
             <th>
                 <a asp-action="Index" asp-route-sortOrder="@ViewData["LastNameSort"]">@Html.DisplayNameFor(model => model.LastNAme)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Sex)              
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["Sex_Sort"]"> @Html.DisplayNameFor(model => model.Sex)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CallName)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["CallNameSort"]">@Html.DisplayNameFor(model => model.CallName)</a>
             </th>
-            <
+            
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
+                <a asp-action="EditStudent" asp-route-id="@item.Id"> @Html.DisplayFor(modelItem => item.FirstName)</a>
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.MiddleName)
+                <a asp-action="EditStudent" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.MiddleName)</a>
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.LastNAme)
+                <a asp-action="EditStudent" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.LastNAme)</a>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Sex)
@@ -50,7 +53,6 @@
                 @Html.DisplayFor(modelItem => item.CallName)
             </td>
             <td>
-                <a asp-action="EditStudent" asp-route-id="@item.Id">Редактировать</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Просмотр</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
             </td>
